@@ -954,3 +954,27 @@ and em.codigo_empleado = 30
 or em.codigo_empleado = 11;
 
 select codigo from empleado;
+
+select '01' codigo, 'bruno dias' empleado from dual 
+union 
+select '02' codigo, 'andres peres' empleado from dual;
+
+
+SELECT SUM(TABLA2.TOTAL_REGISTROS) SUMA_REGISTROS,
+group_concat(TABLA2.CIUDAD ORDER BY TABLA2.CIUDAD SEPARATOR ';') LISTA_CIUDAD 
+ FROM(SELECT TABLA.CIUDAD, CAST(TABLA.TOTAL_REGISTRO AS SIGNED) TOTAL_REGISTROS
+from(SELECT CL.CIUDAD , COUNT(*) TOTAL_REGISTRO /*CL.CIUDAD, EM.CODIGO_EMPLEADO */
+ from cliente cl, empleado em
+ where em.codigo_empleado = cl.codigo_empleado_rep_ventas 
+ and em.codigo_empleado in (11,30)
+ group by cl.ciudad) tabla
+ union 
+ select ('Barcelona') ciudad, (10) total_registro from dual) TABLA2;
+ 
+/*USO DE RELLENO DE CARACTERES CON LPAD Y RPAD*/
+select cl.ciudad, count(*) total_registros,
+LPAD(count(*),8,'0') total_registros,RPAD(count(*),8,'0') total_registros
+from cliente cl, empleado em
+where em.codigo_empleado = cl.codigo_empleado_rep_ventas
+and em.codigo_empleado in (11,30)
+group by cl.ciudad;
